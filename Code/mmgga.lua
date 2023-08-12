@@ -188,7 +188,7 @@ end
 -- PlaceItemInInventoryCheat('HK21')
 -- PlaceItemInInventoryCheat('MG42')
 -- PlaceItemInInventoryCheat('RPK74')
-MMGGA.debug = true
+-- MMGGA.debug = true
 
 MMGGA:init()
 
