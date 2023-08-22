@@ -96,4 +96,30 @@ PlaceObj('ModItemGameRuleDef', {
 		}),
 	},
 }),
+PlaceObj('ModItemOptionToggle', {
+	'name', "mmgga_APDeposit",
+	'DisplayName', "Next Turn AP",
+	'Help', "If a merc runs out of action points (AP) during the MG <em>Overwatch</em>, continue <em>Interrupt</em> attacks by using the next turn's AP.",
+	'DefaultValue', true,
+}),
+PlaceObj('ModItemOptionChoice', {
+	'name', "mmgga_MGFreeInterruptAttacks",
+	'DisplayName', "Min MG Interrupts",
+	'Help', "Minimum MG <em>Interrupt</em> attacks per turn. Used only when <em>Next Turn AP</em> is <em>OFF</em>.",
+	'DefaultValue', "3",
+	'ChoiceList', {
+		"1 (Vanilla)",
+		"2",
+		"3 (Default)",
+		"4",
+		"5",
+		"10",
+		"15",
+	},
+}),
+PlaceObj('ModItemOptionToggle', {
+	'name', "mmgga_ShortOW",
+	'DisplayName', "Short MG Overwatch Range",
+	'Help', "Vanilla hardcodes MG <em>Overwatch</em> Range to maximum distance. MMGGA allows scaling OW from <em>medium</em> to <em>long</em>. This option unlocks <em>short</em> ranges.",
+}),
 }

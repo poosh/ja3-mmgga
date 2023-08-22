@@ -1,4 +1,5 @@
 MMGGA = {
+    modID = 'FGAVv33',
     debug = false,
 
     BreakingStatusEffects = {
@@ -17,7 +18,7 @@ MMGGA = {
     end,
 
     GetMinAimRange = function (action, unit, weapon)
-        return weapon.WeaponRange / 2
+        return CurrentModOptions.mmgga_ShortOW and 4 or weapon.WeaponRange / 2
     end,
 
     GetMaxAimRange = function (action, unit, weapon)
@@ -26,7 +27,7 @@ MMGGA = {
 }
 
 function MMGGA:dbg(...)
-    if (MMGGA.debug) then
+    if MMGGA.debug then
         print('MGGGA', ...)
     end
 end
@@ -53,18 +54,21 @@ function MMGGA:OverwatchAttack(attacker, action, target, results, attack_args)
     local attack_ap = CombatActions[attack_args.action_id]:GetAPCost(attacker);
     local turnData = self:GetTurnData(attacker)
     turnData.ap_deposit = turnData.ap_deposit - attack_ap;
-    self:dbg(attacker.session_id, 'AP deposit', turnData.ap_deposit / const.Scale.AP)
+    if CurrentModOptions.mmgga_APDeposit then
+        self:dbg(attacker.session_id, 'AP remaining', turnData.ap_deposit / const.Scale.AP)
+    end
 end
 
 function MMGGA:PlayerTurnStart(teamIndex)
-    -- local team = g_Teams[teamIndex]
-    for unit, data in pairs(self.TurnData) do
-        if data.ap_deposit < 0 then
-            self:dbg(unit.session_id, 'Reduce AP from', unit:GetUIActionPoints() / const.Scale.AP,
-                    'by', data.ap_deposit / const.Scale.AP)
-            unit:ConsumeAP(-data.ap_deposit)
+    if CurrentModOptions.mmgga_APDeposit then
+        for unit, data in pairs(self.TurnData) do
+            if data.ap_deposit < 0 then
+                self:dbg(unit.session_id, 'Reduce AP from', unit:GetUIActionPoints() / const.Scale.AP,
+                        'by', data.ap_deposit / const.Scale.AP)
+                unit:ConsumeAP(-data.ap_deposit)
+            end
+            data.ap_deposit = 0
         end
-        data.ap_deposit = 0
     end
 end
 
@@ -75,7 +79,9 @@ function MMGGA:PlayerTurnEnd(teamIndex)
         local ow = g_Overwatch[unit]
         if ow and ow.permanent then
             local td = self:GetTurnData(unit)
-            self:dbg(unit.session_id, 'AP deposit', td.ap_deposit / const.Scale.AP)
+            if (CurrentModOptions.mmgga_APDeposit) then
+                self:dbg(unit.session_id, 'AP remaining', td.ap_deposit / const.Scale.AP)
+            end
         end
     end
 end
@@ -103,10 +109,21 @@ function MMGGA:UnitDamaged(unit, dmg, hit_descr)
     end
 end
 
+function MMGGA.GetFirstNumberInStr(s)
+    return tonumber(s:match('(%d+).*'))
+end
+
+function MMGGA:reload()
+    MMGGA:dbg('Reload')
+
+    const.Combat.MGFreeInterruptAttacks = CurrentModOptions.mmgga_APDeposit and 100 or MMGGA.GetFirstNumberInStr(CurrentModOptions.mmgga_MGFreeInterruptAttacks) or 3
+    MMGGA:dbg('MGFreeInterruptAttacks =', const.Combat.MGFreeInterruptAttacks)
+    MMGGA:dbg('MG Short OW =', CurrentModOptions.mmgga_ShortOW)
+end
+
 function MMGGA:init()
     MMGGA:dbg('>>> MMGGA Init')
-
-    const.Combat.MGFreeInterruptAttacks = 100
+    self:reload()
 
     -- Presets.InventoryItemCompositeDef['Firearm - MG'].HK21
 
@@ -181,6 +198,18 @@ function MMGGA:init()
       end)
 
     MMGGA:dbg('<<< MMGGA Init Done')
+end
+
+function OnMsg.ApplyModOptions(id)
+    if id == MMGGA.modID then
+        MMGGA:reload()
+    end
+end
+
+function HeavyWeaponsTrainingCostMod(currentAPCost)
+    local reduction = CharacterEffectDefs.HeavyWeaponsTraining:ResolveValue("ap_cost_reduction") * const.Scale.AP
+    local minCost = Min(currentAPCost, CharacterEffectDefs.HeavyWeaponsTraining:ResolveValue("min_ap_cost") * const.Scale.AP)
+    return Max(minCost, currentAPCost - reduction)
 end
 
 -- FIXME: Remove before release!

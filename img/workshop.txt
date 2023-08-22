@@ -1,4 +1,5 @@
 Patch 1.03 has ruined Machine Guns. This mod tries to make them great again but preserves balance.
+Compatible with [b]1.1.0[/b].
 
 [h1]Features[/h1]
 [list]
@@ -16,14 +17,14 @@ The main reason why Machine Guns are so deadly (i.e., were before 1.03) is the d
 JA3 1.02 had two MG "bugs": a) use MAX AP to calculate interrupt count instead of remaining AP; b) reset MG interrupt count on each kill. Those two bugs gave MG a unique feature - [b]Area Denial[/b]. Patch 1.03 fixed those two "bugs", ruining the feature and turning MGs from unique weapons into worse versions of ARs.
 MMGGA restores the area denial feature by removing interrupt count dependency on AP. Machine Gun operators can shoot until they run out of ammo. Speaking of which, MG magazines are made smaller, and reloads cost more for balance reasons.
 
-[h1]AP Deposit[/h1]
+[h1]Consume Next Turn's AP (Optional)[/h1]
 MG interrupt attacks still use Action Points. When the remaining AP is not enough to perform the attack, the merc "borrows" AP from the next turn. MG continues to shoot, but the merc will have less AP in the next turn. Making too many attacks leads to skipping the next turn due to AP=0. Nonetheless, MG will continue shooting (triggering interrupts) until running out of ammo.
 
 [h1]Meat Shield Tactic[/h1]
 Since enemies are still dumb, MMGGA exploits their dumbness as a valid tactic against MG emplacement. Enemies act as meat shields, forcing the MG operator to use more ammo and eventually reload. MG reloads cost more, and the AP Deposit system may entirely drain the next turn's AP - making the merc skip the next turn.
 
 [h1]Adjustable Overwatch Cone[/h1]
-MMGGA allows adjusting the range of MG Overwatch Cone - similar to other weapons, like AR. There is the minimum Overwatch range for MG, though. The maximum Overwatch range depends on [b][Marksmanship[/b]. Overwatch angle depends on [/b]Strength[/b]. Stronger mercs can move/rotate MG faster, leading to a wider Overwatch cone.
+MMGGA allows adjusting the range of MG Overwatch Cone - similar to other weapons, like AR. There is the minimum Overwatch range for MG, though. The maximum Overwatch range depends on [b]Marksmanship[/b]. Overwatch angle depends on [b]Strength[/b]. Stronger mercs can move/rotate MG faster, leading to a wider Overwatch cone.
 
 [h1]Extra Options to Break MG Overwatch[/h1]
 MG Overwatch can be broken by:
@@ -31,4 +32,12 @@ MG Overwatch can be broken by:
 [*] Emptying the magazine. [b]Opportunistic Killer[/b] does NOT auto-reload machine guns anymore.
 [*] Suppression or Burning. Throwing Flashbang or Molotov are good options to eliminate MG OW.
 [*] Nearby explosions. Depends on [b]Health[/b]. If an MG operator receives explosive damage >15% HLT, the OW breaks.
+[/list]
+
+[h1]Mod Options[/h1]
+The player can control the following MMGGA features:
+[list]
+[*] [b]Next Turn AP[/b] - whenever to use the next turn's AP to continue Interrupts (MMGGA special) or stop Overwatch (Vanilla behavior).
+[*] [b]Min MG Interrupts[/b] - in case of "Next Turn AP" disabled, the player can set the minimum number of MG interrupt even if the merc does not have enough AP. Vanilla 1.0.3 has this set to 1 (which is ridiculous, especially when all other weapons have 2). The default option is "3", which somewhat restores the 1.0.2 behavior. Once again, this option is used only if "Next Turn AP" is OFF!
+[*] [b]Short MG Overwatch Range[/b] - Vanilla hardcodes MG Overwatch Range to maximum distance. MMGGA allows scaling OW from medium to long. This option unlocks short ranges.
 [/list]
