@@ -219,5 +219,6 @@ end
 -- PlaceItemInInventoryCheat('RPK74')
 -- MMGGA.debug = true
 
-MMGGA:init()
-
+function OnMsg.DataLoaded ()
+    MMGGA:init()
+end

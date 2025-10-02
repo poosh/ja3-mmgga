@@ -1,5 +1,5 @@
 Patch 1.03 has ruined Machine Guns. This mod tries to make them great again but preserves balance.
-Compatible with [b]1.1.0[/b].
+Compatible with [b]1.5.1[/b].
 
 [h1]Features[/h1]
 [list]
