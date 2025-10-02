@@ -26,7 +26,7 @@ MMGGA = {
     end
 }
 
-function MMGGA:dbg(...)
+function MMGGA:PrintDebug(...)
     if MMGGA.debug then
         print('MGGGA', ...)
     end
@@ -55,7 +55,7 @@ function MMGGA:OverwatchAttack(attacker, action, target, results, attack_args)
     local turnData = self:GetTurnData(attacker)
     turnData.ap_deposit = turnData.ap_deposit - attack_ap;
     if CurrentModOptions.mmgga_APDeposit then
-        self:dbg(attacker.session_id, 'AP remaining', turnData.ap_deposit / const.Scale.AP)
+        self:PrintDebug(attacker.session_id, 'AP remaining', turnData.ap_deposit / const.Scale.AP)
     end
 end
 
@@ -63,7 +63,7 @@ function MMGGA:PlayerTurnStart(teamIndex)
     if CurrentModOptions.mmgga_APDeposit then
         for unit, data in pairs(self.TurnData) do
             if data.ap_deposit < 0 then
-                self:dbg(unit.session_id, 'Reduce AP from', unit:GetUIActionPoints() / const.Scale.AP,
+                self:PrintDebug(unit.session_id, 'Reduce AP from', unit:GetUIActionPoints() / const.Scale.AP,
                         'by', data.ap_deposit / const.Scale.AP)
                 unit:ConsumeAP(-data.ap_deposit)
             end
@@ -80,19 +80,19 @@ function MMGGA:PlayerTurnEnd(teamIndex)
         if ow and ow.permanent then
             local td = self:GetTurnData(unit)
             if (CurrentModOptions.mmgga_APDeposit) then
-                self:dbg(unit.session_id, 'AP remaining', td.ap_deposit / const.Scale.AP)
+                self:PrintDebug(unit.session_id, 'AP remaining', td.ap_deposit / const.Scale.AP)
             end
         end
     end
 end
 
 function MMGGA:CombatEnd()
-    self:dbg("Combat End");
+    self:PrintDebug("Combat End");
     self.TurnData = {}
 end
 
 function MMGGA:Dismount(unit, reason)
-    self:dbg(unit.session_id, 'breaks MG OW -', reason);
+    self:PrintDebug(unit.session_id, 'breaks MG OW -', reason);
     local cmdid = unit:HasStatusEffect("ManningEmplacement") and 'MGLeave' or 'MGPack'
     NetStartCombatAction(cmdid, unit, 0)
 end
@@ -114,15 +114,15 @@ function MMGGA.GetFirstNumberInStr(s)
 end
 
 function MMGGA:reload()
-    MMGGA:dbg('Reload')
+    MMGGA:PrintDebug('Reload')
 
     const.Combat.MGFreeInterruptAttacks = CurrentModOptions.mmgga_APDeposit and 100 or MMGGA.GetFirstNumberInStr(CurrentModOptions.mmgga_MGFreeInterruptAttacks) or 3
-    MMGGA:dbg('MGFreeInterruptAttacks =', const.Combat.MGFreeInterruptAttacks)
-    MMGGA:dbg('MG Short OW =', CurrentModOptions.mmgga_ShortOW)
+    MMGGA:PrintDebug('MGFreeInterruptAttacks =', const.Combat.MGFreeInterruptAttacks)
+    MMGGA:PrintDebug('MG Short OW =', CurrentModOptions.mmgga_ShortOW)
 end
 
 function MMGGA:init()
-    MMGGA:dbg('>>> MMGGA Init')
+    MMGGA:PrintDebug('>>> MMGGA Init')
     self:reload()
 
     -- Presets.InventoryItemCompositeDef['Firearm - MG'].HK21
@@ -165,14 +165,14 @@ function MMGGA:init()
                         local weapon1, weapon2 = unit:GetActiveWeapons()
                         if IsKindOf(weapon1, "Firearm") then
                             if IsKindOf(weapon1, "MachineGun") then
-                                MMGGA:dbg(unit.session_id, 'Prevent MG Auto Reload')
+                                MMGGA:PrintDebug(unit.session_id, 'Prevent MG Auto Reload')
                             else
                                 unit:ReloadWeapon(weapon1)
                             end
                         end
                         if IsKindOf(weapon2, "Firearm") then
                             if IsKindOf(weapon2, "MachineGun") then
-                                MMGGA:dbg(unit.session_id, 'Prevent MG Auto Reload')
+                                MMGGA:PrintDebug(unit.session_id, 'Prevent MG Auto Reload')
                             else
                                 unit:ReloadWeapon(weapon2)
                             end
@@ -193,11 +193,11 @@ function MMGGA:init()
             }) }
 
             ReloadMsgReactions()
-            MMGGA:dbg('OpportunisticKillerBuff replaced')
+            MMGGA:PrintDebug('OpportunisticKillerBuff replaced')
         end
       end)
 
-    MMGGA:dbg('<<< MMGGA Init Done')
+    MMGGA:PrintDebug('<<< MMGGA Init Done')
 end
 
 function OnMsg.ApplyModOptions(id)

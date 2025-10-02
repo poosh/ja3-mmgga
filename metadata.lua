@@ -2,13 +2,13 @@ return PlaceObj('ModDef', {
 	'title', "MMGGA - Make Machine Guns Great Again",
 	'description', "Patch 1.03 has ruined Machine Guns. This mod tries to make them great again, but preserve balance. Compatible with JA3 v1.5.1.\nFeatures:\n- MG Interrupt count is not limited by AP but ammo in the magazine\n- Smaller MG magazines, more AP to reload\n- Break MG OW by Suppressing, Burning, or dealing Explosive damage\n- Adjustable OW range\n- MG benefit from MRK, STR, and HLT. Less dependency on AGI/DEX.",
 	'image', "Mod/FGAVv33/img/MMGGA_Logo512.png",
-	'last_changes', '- Compatible with JA3 v1.5.1\n- An option to control NEXT TURN AP\n- An option to adjust MG Minimum Interrupt Attacks\n- An option to unlock short MG OW ranges\n- Fixed "Pack MG" AP cost for Heavy Weapons perk',
+	'last_changes', "- Fixed dbg() warning",
 	'dependencies', {},
 	'id', "FGAVv33",
 	'author', "[ScrN]PooSH",
 	'version_major', 1,
-	'version_minor', 2,
-	'version', 253,
+	'version_minor', 3,
+	'version', 254,
 	'lua_revision', 233360,
 	'saved_with_revision', 366685,
 	'code', {
@@ -20,8 +20,8 @@ return PlaceObj('ModDef', {
 		mmgga_ShortOW = false,
 	},
 	'has_data', true,
-	'saved', 1759427692,
-	'code_hash', -7941042612715971234,
+	'saved', 1759431012,
+	'code_hash', -2273335495063373115,
 	'affected_resources', {
 		PlaceObj('ModResourcePreset', {
 			'Class', "GameRuleDef",
